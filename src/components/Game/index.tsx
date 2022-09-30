@@ -1,6 +1,8 @@
-import "./styles.css";
+import { useState, useEffect } from "react";
 import useCharacter from "../../hooks/useCharacter";
 import { handleAttack } from "./utils";
+import "./styles.css";
+import { Button, Dialog, DialogContent } from "@mui/material";
 
 interface GameObject {
   name: string;
@@ -26,6 +28,37 @@ export interface Props {
 const Game = ({ name, bg, player, enemy }: Props) => {
   const playerObj = useCharacter(player.name);
   const enemyObj = useCharacter(enemy.name);
+
+  const [gameOverModal, setGameOverModal] = useState<{
+    open: boolean;
+    message: string | null;
+  }>({
+    open: false,
+    message: null,
+  });
+
+  useEffect(() => {
+    if (playerObj.health <= 0) {
+      setGameOverModal({
+        open: true,
+        message: `${enemy.name} Won the Battle!`,
+      });
+    } else if (enemyObj.health <= 0) {
+      setGameOverModal({
+        open: true,
+        message: `${player.name} Won the Battle!`,
+      });
+    }
+  }, [playerObj.health, enemyObj.health]);
+
+  const restartGame = () => {
+    playerObj.resetHealth();
+    enemyObj.resetHealth();
+    setGameOverModal({
+      open: false,
+      message: null,
+    });
+  };
 
   const handleEnemyAttack = () => {
     handleAttack(enemyObj, playerObj, "L");
@@ -84,6 +117,13 @@ const Game = ({ name, bg, player, enemy }: Props) => {
           {enemy.name} - {enemy.attack.name}
         </button>
       </div>
+
+      <Dialog open={gameOverModal.open} disableEscapeKeyDown>
+        <DialogContent>{gameOverModal.message}</DialogContent>
+        <Button variant="contained" onClick={restartGame}>
+          Restart
+        </Button>
+      </Dialog>
     </div>
   );
 };

@@ -11,6 +11,7 @@ export interface Character {
   health: number;
   increaseHealth: HealthUpdater;
   decreaseHealth: HealthUpdater;
+  resetHealth: () => void;
 }
 
 const useCharacter = (id: string): Character => {
@@ -25,6 +26,10 @@ const useCharacter = (id: string): Character => {
 
   const decreaseHealth: HealthUpdater = (delta) => {
     setHealth((prev) => Math.max(prev - delta, 0));
+  };
+
+  const resetHealth = () => {
+    setHealth(100);
   };
 
   // Update character's health
@@ -42,6 +47,7 @@ const useCharacter = (id: string): Character => {
     health,
     increaseHealth,
     decreaseHealth,
+    resetHealth,
   };
 };
 
