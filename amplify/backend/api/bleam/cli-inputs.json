@@ -13,6 +13,9 @@
         "expirationTime": 7,
         "apiKeyExpirationDate": "2022-10-05T19:04:02.074Z",
         "keyDescription": ""
+      },
+      {
+        "mode": "AWS_IAM"
       }
     ]
   }
