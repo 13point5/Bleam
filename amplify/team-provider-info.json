@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-bleam-staging-161918-authRole",
+      "UnauthRoleArn": "arn:aws:iam::195433434420:role/amplify-bleam-staging-161918-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::195433434420:role/amplify-bleam-staging-161918-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-bleam-staging-161918-deployment",
+      "UnauthRoleName": "amplify-bleam-staging-161918-unauthRole",
+      "StackName": "amplify-bleam-staging-161918",
+      "StackId": "arn:aws:cloudformation:us-east-2:195433434420:stack/amplify-bleam-staging-161918/ce4afcd0-3ced-11ed-b0f0-064056590caa",
+      "AmplifyAppId": "d3lmft3gfubxer"
+    },
+    "categories": {
+      "auth": {
+        "Bleam": {}
+      }
+    }
+  }
+}

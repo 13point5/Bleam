@@ -1,0 +1,16 @@
+{
+  "resourceName": "gameAssets",
+  "policyUUID": "dffd67e2",
+  "bucketName": "game-assets",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

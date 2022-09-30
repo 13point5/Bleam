@@ -1,0 +1,97 @@
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+.arena {
+  position: relative;
+  margin: 0 auto;
+  margin-top: 50px;
+
+  width: 900px;
+  aspect-ratio: 64 / 36;
+
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: left top;
+}
+
+.character {
+  position: absolute;
+  left: 50px;
+  bottom: 50px;
+
+  width: 145px;
+  height: auto;
+}
+
+.enemy {
+  left: auto;
+  right: 50px;
+}
+
+.stats {
+  width: fit-content;
+  background-color: white;
+  padding: 5px 10px;
+  padding-bottom: 10px;
+  border: 3px solid black;
+
+  position: absolute;
+  top: -20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stats span {
+  font-size: 1rem;
+  color: black;
+}
+
+.stats progress {
+  width: 150px;
+  border-radius: 0;
+  height: 8px;
+}
+
+.player-stats {
+  left: 50px;
+}
+
+.enemy-stats {
+  left: auto;
+  right: 50px;
+}
+
+.attacks-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.attack-btn {
+  cursor: pointer;
+
+  width: 400px;
+  height: 100px;
+
+  background-color: white;
+  border: 3px solid black;
+}
+
+.attack {
+  position: absolute;
+  width: 50px;
+  height: auto;
+
+  visibility: hidden;
+}
