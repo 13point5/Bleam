@@ -1,6 +1,7 @@
 import * as R from "ramda";
 import { useState, useEffect, ChangeEvent } from "react";
 import { Storage, API } from "aws-amplify";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 import { updateGame as updateGameMutation } from "../../graphql/mutations";
 import { useParams } from "react-router-dom";
 import { getGame } from "../../apiHelpers";
@@ -17,8 +18,6 @@ import {
   Button,
   FormControlLabel,
   Switch,
-  FormControl,
-  InputLabel,
   Typography,
 } from "@mui/material";
 import GamePreview from "../../components/Game";
@@ -31,6 +30,7 @@ import { LoadingButton } from "@mui/lab";
 const drawerWidth = 400;
 
 const GameBuilder = () => {
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const params = useParams();
   const { id } = params;
 
@@ -45,7 +45,7 @@ const GameBuilder = () => {
     try {
       if (!id) throw new Error("Game not found");
 
-      const gameData = await getGame(id);
+      const gameData = await getGame(id, authStatus);
 
       setGame({
         data: gameData,

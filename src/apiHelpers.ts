@@ -1,12 +1,16 @@
 import * as R from "ramda";
-import { API, graphqlOperation, Storage } from "aws-amplify";
+import { API, Storage } from "aws-amplify";
 import { getGame as getGameQuery } from "./graphql/queries";
 import { ActualGameSchema, GameData } from "./types.d";
 import { Game as GameSchema } from "./API";
 import { imgPaths, defaultGameData } from "./constants";
 
-export const getGame = async (id: string): Promise<ActualGameSchema> => {
-  const response: any = await API.graphql(graphqlOperation(getGameQuery, { id }));
+export const getGame = async (id: string, authStatus: string): Promise<ActualGameSchema> => {
+  const response: any = await API.graphql({
+    query: getGameQuery,
+    variables: { id },
+    authMode: authStatus === "authenticated" ? "AMAZON_COGNITO_USER_POOLS" : "AWS_IAM",
+  });
   const gameData: GameSchema = response.data.getGame;
   let actualGameData: GameData = gameData.data ? JSON.parse(gameData.data) : defaultGameData;
 

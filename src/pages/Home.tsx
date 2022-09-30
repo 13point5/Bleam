@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 
+import { useAuthenticator } from "@aws-amplify/ui-react";
 import { API } from "aws-amplify";
 import { listGames } from "../graphql/queries";
 import { Game } from "../API";
@@ -14,6 +15,7 @@ export interface GamesState {
 }
 
 const Home = () => {
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const [games, setGames] = useState<GamesState>({
     data: [],
     fetching: true,
@@ -32,6 +34,7 @@ const Home = () => {
               },
             },
           },
+          authMode: authStatus === "authenticated" ? "AMAZON_COGNITO_USER_POOLS" : "AWS_IAM",
         });
 
         setGames({

@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 import { Box } from "@mui/material";
 import { getGame } from "../apiHelpers";
 import Game from "../components/Game";
 import { GameState } from "../types.d";
 
 const GamePage = () => {
+  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
   const params = useParams();
   const { id } = params;
 
@@ -20,7 +22,7 @@ const GamePage = () => {
       try {
         if (!id) throw new Error("Game not found");
 
-        const gameData = await getGame(id);
+        const gameData = await getGame(id, authStatus);
 
         setGame({
           data: gameData,
