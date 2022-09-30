@@ -1,5 +1,7 @@
 # Bleam: A game builder for simple turn based games
 
+![builder preview](https://user-images.githubusercontent.com/20568438/193233549-232161d4-b8f5-4382-89f7-35868c917a15.png)
+
 ## Instructions to set up Bleam locally
 
 Install dependencies
