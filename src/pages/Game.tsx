@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import { Box } from "@mui/material";
 import { getGame } from "../apiHelpers";
-import Game from "../components/Game";
+import Game from "../components/MathGame";
 import { GameState } from "../types.d";
 
 const GamePage = () => {
