@@ -32,7 +32,12 @@ const hurtCharacter = (character: Character, faceDirection: FaceDirection = "R")
   character.decreaseHealth(20);
 };
 
-export const handleAttack = (source: Character, destination: Character, faceDirection: FaceDirection = "R") => {
+export const handleAttack = (
+  source: Character,
+  destination: Character,
+  faceDirection: FaceDirection = "R",
+  onComplete?: () => void,
+) => {
   if (!(source.ref.current && destination.ref.current && source.attackRef.current)) return;
 
   const attackDOMRect = source.attackRef.current.getBoundingClientRect();
@@ -75,6 +80,9 @@ export const handleAttack = (source: Character, destination: Character, faceDire
     )
     .set(source.attackRef.current, {
       visibility: "hidden",
-      onComplete: () => hurtCharacter(destination),
+      onComplete: () => {
+        hurtCharacter(destination);
+        onComplete && onComplete();
+      },
     });
 };

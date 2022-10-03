@@ -65,7 +65,9 @@ const Game = ({ name, bg, player, enemy }: Props) => {
   };
 
   const handlePlayerAttack = () => {
-    handleAttack(playerObj, enemyObj);
+    handleAttack(playerObj, enemyObj, "R", () => {
+      handleEnemyAttack();
+    });
   };
 
   return (
@@ -111,10 +113,6 @@ const Game = ({ name, bg, player, enemy }: Props) => {
       <div className="attacks-bar">
         <button type="button" className="attack-btn" onClick={handlePlayerAttack}>
           {player.name} - {player.attack.name}
-        </button>
-
-        <button type="button" className="attack-btn" onClick={handleEnemyAttack}>
-          {enemy.name} - {enemy.attack.name}
         </button>
       </div>
 
