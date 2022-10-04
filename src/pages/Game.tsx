@@ -52,7 +52,7 @@ const GamePage = () => {
         mt: 4,
       }}
     >
-      <Game name={game.data.name} {...game.data.data} />
+      <Game name={game.data.name} data={game.data.data} />
     </Box>
   );
 };

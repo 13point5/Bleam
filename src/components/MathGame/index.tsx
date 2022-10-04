@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useCharacter from "../../hooks/useCharacter";
 import { handleAttack } from "./utils";
-import "./styles.css";
+import styles from "./styles.module.css";
 import { Button, Dialog, DialogContent } from "@mui/material";
 
 interface GameObject {
@@ -16,16 +16,18 @@ interface CharacterProps extends GameObject {
 
 export interface Props {
   name: string;
-  preview: string | null;
-  bg: {
-    img: string | null;
-    style?: Record<string, unknown>;
+  data: {
+    preview: string | null;
+    bg: {
+      img: string | null;
+      style?: Record<string, unknown>;
+    };
+    player: CharacterProps;
+    enemy: CharacterProps;
   };
-  player: CharacterProps;
-  enemy: CharacterProps;
 }
 
-const Game = ({ name, bg, player, enemy }: Props) => {
+const Game = ({ name, data: { bg, player, enemy } }: Props) => {
   const playerObj = useCharacter(player.name);
   const enemyObj = useCharacter(enemy.name);
 
@@ -71,47 +73,53 @@ const Game = ({ name, bg, player, enemy }: Props) => {
   };
 
   return (
-    <div className="game">
+    <div className={styles.game}>
       <h1>{name}</h1>
       <div
-        className="arena"
+        className={styles.arena}
         style={{
           backgroundImage: `url(${bg.img})`,
           ...bg.style,
         }}
       >
-        <div className="stats player-stats">
+        <div className={`${styles.stats} ${styles["player-stats"]}`}>
           <span>{player.name}</span>
           <progress ref={playerObj.healthRef} max={100} />
         </div>
 
-        <div className="stats enemy-stats">
+        <div className={`${styles.stats} ${styles["enemy-stats"]}`}>
           <span>{enemy.name}</span>
           <progress ref={enemyObj.healthRef} max={100} />
         </div>
 
-        <img ref={playerObj.ref} className="character" alt="" src={player.img || ""} style={player.style} />
+        <img ref={playerObj.ref} className={styles.character} alt="" src={player.img || ""} style={player.style} />
 
         <img
           ref={playerObj.attackRef}
-          className="attack"
+          className={styles.attack}
           src={player.attack.img || ""}
           style={player.attack.style}
           alt=""
         />
         <img
           ref={enemyObj.attackRef}
-          className="attack"
+          className={styles.attack}
           src={enemy.attack.img || ""}
           style={enemy.attack.style}
           alt=""
         />
 
-        <img ref={enemyObj.ref} className="character enemy" alt="" src={enemy.img || ""} style={enemy.style} />
+        <img
+          ref={enemyObj.ref}
+          className={`${styles.character} ${styles.enemy}`}
+          alt=""
+          src={enemy.img || ""}
+          style={enemy.style}
+        />
       </div>
 
-      <div className="attacks-bar">
-        <button type="button" className="attack-btn" onClick={handlePlayerAttack}>
+      <div className={styles["attacks-bar"]}>
+        <button type="button" className={styles["attack-btn"]} onClick={handlePlayerAttack}>
           {player.name} - {player.attack.name}
         </button>
       </div>
