@@ -1,5 +1,6 @@
 import { gsap } from "gsap";
 import { Character } from "../../hooks/useCharacter";
+import { Question } from "./types.d";
 
 type FaceDirection = "L" | "R";
 
@@ -85,4 +86,23 @@ export const handleAttack = (
         onComplete && onComplete();
       },
     });
+};
+
+const difficulties = [10, 20, 30];
+
+export const getQuestions = (count: number): Question[] => {
+  const questions = [];
+
+  for (let qsnId = 1; qsnId <= count; qsnId += 1) {
+    const difficulty = difficulties[(qsnId - 1) % difficulties.length];
+
+    questions.push({
+      id: String(qsnId),
+      question: `Question ${qsnId} - Difficulty ${difficulty}`,
+      answer: "1",
+      difficulty,
+    });
+  }
+
+  return questions;
 };

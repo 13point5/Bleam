@@ -1,8 +1,11 @@
+import * as R from "ramda";
 import { useState, useEffect } from "react";
+import { Button, Dialog, DialogContent, Stack, Typography } from "@mui/material";
 import useCharacter from "../../hooks/useCharacter";
-import { handleAttack } from "./utils";
+import { handleAttack, getQuestions } from "./utils";
+import { OnAnswerEvent } from "./types.d";
+import QuestionModal from "./QuestionModal";
 import styles from "./styles.module.css";
-import { Button, Dialog, DialogContent } from "@mui/material";
 
 interface GameObject {
   name: string;
@@ -27,9 +30,19 @@ export interface Props {
   };
 }
 
+const questions = getQuestions(6);
+const maxHealth = questions.reduce((sum, question) => sum + question.difficulty, 0);
+
 const Game = ({ name, data: { bg, player, enemy } }: Props) => {
-  const playerObj = useCharacter(player.name);
-  const enemyObj = useCharacter(enemy.name);
+  const playerObj = useCharacter(player.name, maxHealth);
+  const enemyObj = useCharacter(enemy.name, maxHealth);
+
+  console.log("questions", questions);
+
+  const [questionModal, setQuestionModal] = useState({
+    open: false,
+    questionIndex: 0,
+  });
 
   const [gameOverModal, setGameOverModal] = useState<{
     open: boolean;
@@ -67,9 +80,32 @@ const Game = ({ name, data: { bg, player, enemy } }: Props) => {
   };
 
   const handlePlayerAttack = () => {
-    handleAttack(playerObj, enemyObj, "R", () => {
+    setQuestionModal(
+      R.mergeDeepLeft({
+        open: true,
+      }),
+    );
+  };
+
+  const handleAnswer: OnAnswerEvent = (questionId, userAnswer) => {
+    const question = questions.find(R.propEq("id", questionId));
+
+    if (!question) throw new Error("Question not found");
+
+    const correctAnswer = question.answer;
+
+    if (userAnswer === correctAnswer) {
+      handleAttack(playerObj, enemyObj, "R");
+    } else {
       handleEnemyAttack();
-    });
+    }
+
+    setQuestionModal((prev) =>
+      R.mergeDeepLeft({
+        open: false,
+        questionIndex: prev.questionIndex + 1,
+      })(prev),
+    );
   };
 
   return (
@@ -84,12 +120,34 @@ const Game = ({ name, data: { bg, player, enemy } }: Props) => {
       >
         <div className={`${styles.stats} ${styles["player-stats"]}`}>
           <span>{player.name}</span>
-          <progress ref={playerObj.healthRef} max={100} />
+          <Stack
+            sx={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 2,
+            }}
+          >
+            <progress ref={playerObj.healthRef} max={maxHealth} />
+
+            <Typography color="black">{playerObj.health}</Typography>
+          </Stack>
         </div>
 
         <div className={`${styles.stats} ${styles["enemy-stats"]}`}>
           <span>{enemy.name}</span>
-          <progress ref={enemyObj.healthRef} max={100} />
+          <Stack
+            sx={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 2,
+            }}
+          >
+            <progress ref={enemyObj.healthRef} max={maxHealth} />
+
+            <Typography color="black">{enemyObj.health}</Typography>
+          </Stack>
         </div>
 
         <img ref={playerObj.ref} className={styles.character} alt="" src={player.img || ""} style={player.style} />
@@ -130,6 +188,12 @@ const Game = ({ name, data: { bg, player, enemy } }: Props) => {
           Restart
         </Button>
       </Dialog>
+
+      <QuestionModal
+        open={questionModal.open}
+        question={questions[questionModal.questionIndex]}
+        onAnswer={handleAnswer}
+      />
     </div>
   );
 };

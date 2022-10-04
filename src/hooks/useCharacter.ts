@@ -14,14 +14,14 @@ export interface Character {
   resetHealth: () => void;
 }
 
-const useCharacter = (id: string): Character => {
+const useCharacter = (id: string, maxHealth: number): Character => {
   const ref: Character["ref"] = useRef(null);
   const attackRef = useRef<HTMLImageElement | null>(null);
   const healthRef: Character["healthRef"] = useRef(null);
-  const [health, setHealth] = useState<Character["health"]>(100);
+  const [health, setHealth] = useState<Character["health"]>(maxHealth);
 
   const increaseHealth: HealthUpdater = (delta) => {
-    setHealth((prev) => Math.min(prev + delta, 100));
+    setHealth((prev) => Math.min(prev + delta, maxHealth));
   };
 
   const decreaseHealth: HealthUpdater = (delta) => {

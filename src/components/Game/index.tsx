@@ -26,8 +26,8 @@ export interface Props {
 }
 
 const Game = ({ name, bg, player, enemy }: Props) => {
-  const playerObj = useCharacter(player.name);
-  const enemyObj = useCharacter(enemy.name);
+  const playerObj = useCharacter(player.name, 100);
+  const enemyObj = useCharacter(enemy.name, 100);
 
   const [gameOverModal, setGameOverModal] = useState<{
     open: boolean;
