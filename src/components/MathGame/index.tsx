@@ -75,10 +75,6 @@ const Game = ({ name, data: { bg, player, enemy } }: Props) => {
     });
   };
 
-  const handleEnemyAttack = () => {
-    handleAttack(enemyObj, playerObj, "L");
-  };
-
   const handlePlayerAttack = () => {
     setQuestionModal(
       R.mergeDeepLeft({
@@ -95,9 +91,9 @@ const Game = ({ name, data: { bg, player, enemy } }: Props) => {
     const correctAnswer = question.answer;
 
     if (userAnswer === correctAnswer) {
-      handleAttack(playerObj, enemyObj, "R");
+      handleAttack(playerObj, enemyObj, "R", question.difficulty);
     } else {
-      handleEnemyAttack();
+      handleAttack(enemyObj, playerObj, "L", question.difficulty);
     }
 
     setQuestionModal((prev) =>

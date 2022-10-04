@@ -4,7 +4,7 @@ import { Question } from "./types.d";
 
 type FaceDirection = "L" | "R";
 
-const hurtCharacter = (character: Character, faceDirection: FaceDirection = "R") => {
+const hurtCharacter = (character: Character, faceDirection: FaceDirection = "R", damage: number) => {
   const characterRef = character.ref.current;
 
   // Blink
@@ -30,18 +30,20 @@ const hurtCharacter = (character: Character, faceDirection: FaceDirection = "R")
     });
 
   // Decrease character's health
-  character.decreaseHealth(20);
+  character.decreaseHealth(damage);
 };
 
 export const handleAttack = (
   source: Character,
   destination: Character,
   faceDirection: FaceDirection = "R",
-  onComplete?: () => void,
+  damage: number,
 ) => {
   if (!(source.ref.current && destination.ref.current && source.attackRef.current)) return;
 
   const attackDOMRect = source.attackRef.current.getBoundingClientRect();
+  const attackWidth = attackDOMRect.width * (damage / 10);
+
   const sourceDOMRect = source.ref.current.getBoundingClientRect();
   const destinationDOMRect = destination.ref.current.getBoundingClientRect();
 
@@ -49,14 +51,14 @@ export const handleAttack = (
     x:
       faceDirection === "R"
         ? source.ref.current.offsetLeft + source.ref.current.offsetWidth
-        : source.ref.current.offsetLeft - attackDOMRect.width,
+        : source.ref.current.offsetLeft - attackWidth,
     y: source.ref.current.offsetTop + 0.2 * sourceDOMRect.height,
   };
 
   const attackDestinationPosition = {
     x:
       faceDirection === "R"
-        ? destination.ref.current.offsetLeft - attackDOMRect.width
+        ? destination.ref.current.offsetLeft - attackWidth
         : destination.ref.current.offsetLeft + destination.ref.current.offsetWidth,
     y: destination.ref.current.offsetTop + 0.2 * destinationDOMRect.height,
   };
@@ -74,6 +76,7 @@ export const handleAttack = (
         visibility: "visible",
         ...attackSourcePosition,
         rotate: deg,
+        width: attackWidth,
       },
       {
         ...attackDestinationPosition,
@@ -82,8 +85,7 @@ export const handleAttack = (
     .set(source.attackRef.current, {
       visibility: "hidden",
       onComplete: () => {
-        hurtCharacter(destination);
-        onComplete && onComplete();
+        hurtCharacter(destination, faceDirection, damage);
       },
     });
 };
